@@ -59,46 +59,92 @@
         <h2 id="question">Loading question...</h2>
         <div class="options" id="options"></div>
         <p id="result"></p>
-        <button class="next-btn" onclick="fetchQuestion()">Next Question</button>
+        <button class="next-btn" onclick="loadQuestion()">Next Question</button>
     </div>
 
     <script>
-        function decodeHtmlEntities(text) {
-            let tempElement = document.createElement("textarea");
-            tempElement.innerHTML = text;
-            return tempElement.value;
-        }
-
-        async function fetchQuestion() {
-            try {
-                const response = await fetch('https://opentdb.com/api.php?amount=1&type=multiple');
-                const data = await response.json();
-                let q = data.results[0];
-
-                document.getElementById("question").innerText = decodeHtmlEntities(q.question);
-
-                let options = [...q.incorrect_answers, q.correct_answer];
-                options = options.map(decodeHtmlEntities); // Fix encoded options too
-                options.sort(() => Math.random() - 0.5); // Shuffle answers
-
-                let optionsHtml = "";
-                options.forEach(option => {
-                    optionsHtml += `<button onclick="checkAnswer('${option}', '${decodeHtmlEntities(q.correct_answer)}')">${option}</button>`;
-                });
-
-                document.getElementById("options").innerHTML = optionsHtml;
-                document.getElementById("result").innerText = "";
-            } catch (error) {
-                document.getElementById("question").innerText = "Failed to load question. Try again!";
+        const quizData = [
+            {
+                question: "Who is the current Secretary-General of the United Nations?",
+                options: ["António Guterres", "Ban Ki-moon", "Kofi Annan", "Javier Pérez de Cuéllar"],
+                answer: "António Guterres"
+            },
+            {
+                question: "Which country was the first to grant women the right to vote?",
+                options: ["United States", "New Zealand", "France", "United Kingdom"],
+                answer: "New Zealand"
+            },
+            {
+                question: "What is the capital of the European Union?",
+                options: ["Paris", "Brussels", "Berlin", "Rome"],
+                answer: "Brussels"
+            },
+            {
+                question: "Which document serves as the foundation of the U.S. government?",
+                options: ["Bill of Rights", "Declaration of Independence", "The Constitution", "Federalist Papers"],
+                answer: "The Constitution"
+            },
+            {
+                question: "What is the primary role of the International Monetary Fund (IMF)?",
+                options: ["Provide loans to developing countries", "Monitor global financial stability", "Regulate international trade", "Enforce international law"],
+                answer: "Monitor global financial stability"
+            },
+            {
+                question: "In a job interview, what is the best way to answer 'Tell me about yourself'?",
+                options: [
+                    "Talk about hobbies and interests",
+                    "Give a structured response about your work experience and skills",
+                    "Only discuss personal life",
+                    "Avoid answering directly"
+                ],
+                answer: "Give a structured response about your work experience and skills"
+            },
+            {
+                question: "Who was the first democratically elected president of South Africa?",
+                options: ["Nelson Mandela", "F.W. de Klerk", "Jacob Zuma", "Thabo Mbeki"],
+                answer: "Nelson Mandela"
+            },
+            {
+                question: "What is the primary function of the Supreme Court in a democratic country?",
+                options: ["Create laws", "Enforce laws", "Interpret laws", "Elect leaders"],
+                answer: "Interpret laws"
+            },
+            {
+                question: "Which country recently exited the European Union through Brexit?",
+                options: ["Germany", "United Kingdom", "France", "Spain"],
+                answer: "United Kingdom"
+            },
+            {
+                question: "Which of the following is a major cause of inflation?",
+                options: ["High unemployment", "Increased government spending", "Lower wages", "Reduced consumer demand"],
+                answer: "Increased government spending"
             }
+        ];
+
+        let currentQuestionIndex = 0;
+
+        function loadQuestion() {
+            const q = quizData[currentQuestionIndex];
+            document.getElementById("question").innerText = q.question;
+
+            let optionsHtml = "";
+            q.options.forEach(option => {
+                optionsHtml += `<button onclick="checkAnswer('${option}')">${option}</button>`;
+            });
+
+            document.getElementById("options").innerHTML = optionsHtml;
+            document.getElementById("result").innerText = "";
+
+            // Move to next question (loop back if at the end)
+            currentQuestionIndex = (currentQuestionIndex + 1) % quizData.length;
         }
 
-        function checkAnswer(selected, correct) {
-            let resultText = selected === correct ? "✅ Correct!" : "❌ Wrong!";
-            document.getElementById("result").innerText = resultText;
+        function checkAnswer(selected) {
+            let correctAnswer = quizData[(currentQuestionIndex - 1 + quizData.length) % quizData.length].answer;
+            document.getElementById("result").innerText = selected === correctAnswer ? "✅ Correct!" : "❌ Wrong!";
         }
 
-        fetchQuestion(); // Load a question on page load
+        loadQuestion(); // Load first question on page load
     </script>
 
 </body>
