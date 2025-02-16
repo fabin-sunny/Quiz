@@ -21,14 +21,8 @@
             margin: 50px auto;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
         }
-        h1 {
-            font-size: 24px;
-            color: #fff;
-        }
-        h2 {
-            font-size: 20px;
-            margin-bottom: 15px;
-        }
+        h1 { font-size: 24px; }
+        h2 { font-size: 20px; margin-bottom: 15px; }
         .options button {
             display: block;
             width: 100%;
@@ -42,14 +36,8 @@
             cursor: pointer;
             transition: 0.3s;
         }
-        .options button:hover {
-            background: #ff4757;
-        }
-        #result {
-            font-size: 18px;
-            margin: 10px 0;
-            font-weight: bold;
-        }
+        .options button:hover { background: #ff4757; }
+        #result { font-size: 18px; margin: 10px 0; font-weight: bold; }
         .next-btn {
             background: #1dd1a1;
             padding: 10px 20px;
@@ -61,54 +49,49 @@
             margin-top: 15px;
             transition: 0.3s;
         }
-        .next-btn:hover {
-            background: #10ac84;
-        }
+        .next-btn:hover { background: #10ac84; }
     </style>
 </head>
 <body>
 
     <h1>GK Quiz Challenge</h1>
-
     <div class="quiz-container">
         <h2 id="question">Loading question...</h2>
         <div class="options" id="options"></div>
         <p id="result"></p>
-        <button class="next-btn" onclick="nextQuestion()">Next Question</button>
+        <button class="next-btn" onclick="fetchQuestion()">Next Question</button>
     </div>
 
     <script>
-        const quizData = [
-            { question: "What is the capital of France?", options: ["Berlin", "Madrid", "Paris", "Rome"], answer: "Paris" },
-            { question: "Who wrote 'Hamlet'?", options: ["Shakespeare", "Dickens", "Austen", "Hemingway"], answer: "Shakespeare" },
-            { question: "Which planet is known as the Red Planet?", options: ["Earth", "Mars", "Jupiter", "Venus"], answer: "Mars" }
-        ];
-        
-        let currentQuestion = 0;
-        
-        function loadQuestion() {
-            let q = quizData[currentQuestion];
-            document.getElementById("question").innerText = q.question;
-            let optionsHtml = "";
-            q.options.forEach(option => {
-                optionsHtml += `<button onclick="checkAnswer('${option}')">${option}</button>`;
-            });
-            document.getElementById("options").innerHTML = optionsHtml;
+        async function fetchQuestion() {
+            try {
+                const response = await fetch('https://opentdb.com/api.php?amount=1&type=multiple');
+                const data = await response.json();
+                let q = data.results[0];
+
+                document.getElementById("question").innerText = q.question;
+
+                let options = [...q.incorrect_answers, q.correct_answer];
+                options.sort(() => Math.random() - 0.5); // Shuffle options
+                
+                let optionsHtml = "";
+                options.forEach(option => {
+                    optionsHtml += `<button onclick="checkAnswer('${option}', '${q.correct_answer}')">${option}</button>`;
+                });
+
+                document.getElementById("options").innerHTML = optionsHtml;
+                document.getElementById("result").innerText = "";
+            } catch (error) {
+                document.getElementById("question").innerText = "Failed to load question. Try again!";
+            }
         }
-        
-        function checkAnswer(selected) {
-            let correct = quizData[currentQuestion].answer;
+
+        function checkAnswer(selected, correct) {
             let resultText = selected === correct ? "✅ Correct!" : "❌ Wrong!";
             document.getElementById("result").innerText = resultText;
         }
-        
-        function nextQuestion() {
-            currentQuestion = (currentQuestion + 1) % quizData.length;
-            document.getElementById("result").innerText = "";
-            loadQuestion();
-        }
-        
-        loadQuestion();
+
+        fetchQuestion();
     </script>
 
 </body>
