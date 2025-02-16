@@ -8,7 +8,7 @@
         body {
             font-family: 'Arial', sans-serif;
             text-align: center;
-            background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+            background: linear-gradient(135deg, #4facfe, #00f2fe);
             color: #fff;
             margin: 0;
             padding: 0;
@@ -26,30 +26,32 @@
         .options button {
             display: block;
             width: 100%;
-            background: #ff6b81;
+            background: linear-gradient(90deg, #1e90ff, #00c6ff);
             color: #fff;
             border: none;
-            padding: 10px;
+            padding: 12px;
             margin: 5px 0;
-            border-radius: 5px;
+            border-radius: 8px;
             font-size: 16px;
             cursor: pointer;
             transition: 0.3s;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
         }
-        .options button:hover { background: #ff4757; }
+        .options button:hover { background: linear-gradient(90deg, #007bff, #009efd); }
         #result { font-size: 18px; margin: 10px 0; font-weight: bold; }
         .next-btn {
-            background: #1dd1a1;
-            padding: 10px 20px;
+            background: linear-gradient(90deg, #00bcd4, #00e5ff);
+            padding: 12px 20px;
             border: none;
             color: #fff;
             font-size: 16px;
             cursor: pointer;
-            border-radius: 5px;
+            border-radius: 8px;
             margin-top: 15px;
             transition: 0.3s;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
         }
-        .next-btn:hover { background: #10ac84; }
+        .next-btn:hover { background: linear-gradient(90deg, #0097a7, #00acc1); }
     </style>
 </head>
 <body>
@@ -78,8 +80,8 @@
                 document.getElementById("question").innerText = decodeHtmlEntities(q.question);
 
                 let options = [...q.incorrect_answers, q.correct_answer];
-                options = options.map(decodeHtmlEntities); // Fix encoded options too
-                options.sort(() => Math.random() - 0.5); // Shuffle answers
+                options = options.map(decodeHtmlEntities);
+                options.sort(() => Math.random() - 0.5);
 
                 let optionsHtml = "";
                 options.forEach(option => {
@@ -98,7 +100,7 @@
             document.getElementById("result").innerText = resultText;
         }
 
-        fetchQuestion(); // Load a question on page load
+        fetchQuestion(); 
     </script>
 
 </body>
