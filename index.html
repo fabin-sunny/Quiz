@@ -3,19 +3,78 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GK Quiz</title>
+    <title>GK Quiz Challenge</title>
     <style>
-        body { font-family: Arial, sans-serif; text-align: center; }
-        .quiz-container { max-width: 400px; margin: auto; padding: 20px; border: 1px solid #ddd; border-radius: 10px; }
-        button { margin: 5px; padding: 10px; cursor: pointer; }
+        body {
+            font-family: 'Arial', sans-serif;
+            text-align: center;
+            background: linear-gradient(135deg, #f6d365, #fda085);
+            color: #fff;
+            margin: 0;
+            padding: 0;
+        }
+        .quiz-container {
+            max-width: 400px;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 50px auto;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+        h1 {
+            font-size: 24px;
+            color: #fff;
+        }
+        h2 {
+            font-size: 20px;
+            margin-bottom: 15px;
+        }
+        .options button {
+            display: block;
+            width: 100%;
+            background: #ff6b81;
+            color: #fff;
+            border: none;
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .options button:hover {
+            background: #ff4757;
+        }
+        #result {
+            font-size: 18px;
+            margin: 10px 0;
+            font-weight: bold;
+        }
+        .next-btn {
+            background: #1dd1a1;
+            padding: 10px 20px;
+            border: none;
+            color: #fff;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 5px;
+            margin-top: 15px;
+            transition: 0.3s;
+        }
+        .next-btn:hover {
+            background: #10ac84;
+        }
     </style>
 </head>
 <body>
+
+    <h1>GK Quiz Challenge</h1>
+
     <div class="quiz-container">
         <h2 id="question">Loading question...</h2>
-        <div id="options"></div>
+        <div class="options" id="options"></div>
         <p id="result"></p>
-        <button onclick="nextQuestion()">Next Question</button>
+        <button class="next-btn" onclick="nextQuestion()">Next Question</button>
     </div>
 
     <script>
@@ -39,7 +98,8 @@
         
         function checkAnswer(selected) {
             let correct = quizData[currentQuestion].answer;
-            document.getElementById("result").innerText = selected === correct ? "Correct!" : "Wrong!";
+            let resultText = selected === correct ? "✅ Correct!" : "❌ Wrong!";
+            document.getElementById("result").innerText = resultText;
         }
         
         function nextQuestion() {
@@ -50,5 +110,6 @@
         
         loadQuestion();
     </script>
+
 </body>
 </html>
